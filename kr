@@ -1,0 +1,25 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+
+ds = pd.read_csv('/content/Mall_Customers_Segmentation.csv')
+
+print(ds.head())
+print(ds.info())
+print(ds.isnull().sum())
+
+sns.pairplot(ds[['Annual Income (k$)','Age', 'Spending Score (1-100)']])
+plt.show()
+
+corr_matrix = ds[['Annual Income (k$)','Age','Spending Score (1-100)']].corr()
+sns.heatmap(corr_matrix, annot=True, cmap='YlGnBu')
+plt.show()
+
+ds['Genre'] = ds['Genre'].apply(lambda x: 1 if x == 'Male' else 0)
+
+scaler = StandardScaler()
+data_scaled = scaler.fit_transform(ds[['Genre', 'Age', 'Annual Income (k$)', 'Spending Score (1-100)']])
